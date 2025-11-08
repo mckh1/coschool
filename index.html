@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부산대학교 금융일반 포트폴리오</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles and setting Noto Sans KR as primary Korean font */
+        :root {
+            --busan-blue: #004699; /* 부산대 상징색 중 하나 */
+            --busan-light: #f3f4f6;
+        }
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: var(--busan-light);
+        }
+        .busan-bg {
+            background-color: var(--busan-blue);
+        }
+        .busan-text {
+            color: var(--busan-blue);
+        }
+        /* card-shadow remains for the sections, but we'll use shadow-xl for the buttons */
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+        }
+        .accordion-content.active {
+            max-height: 600px; /* 늘어난 콘텐츠를 위해 Max Height 증가 */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- Header / Hero Section -->
+    <header class="busan-bg text-white py-12 md:py-16 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-3 tracking-tight">
+                금융일반 교과 연계형 포트폴리오
+            </h1>
+            <p class="text-xl sm:text-2xl font-light opacity-90">
+                부산대학교 금융일반 과목 학습 성과 및 응용 사례
+            </p>
+            <div class="mt-4 text-sm font-medium">
+                <span class="inline-block py-1 px-3 rounded-full bg-white bg-opacity-20">
+                    강민규 (내성고등학교 1학년) | 교과 연계 이수
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+        <!-- 0. 포트폴리오 소개 및 학습 여정 (Introduction) Section - 강조 표시 제거 -->
+        <section id="introduction" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    포트폴리오 소개 및 학습 여정 
+                </h2>
+            </div>
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
+                <p>
+                    이 포트폴리오는 부산대학교에서 '금융일반' 수업을 들으면서 제가 뭘 배웠는지, 그리고 이 지식을 제 용돈이나 미래 투자에 어떻게 써먹을지 정리한 거예요. 전에는 '재테크'가 막연하게 어렵게만 느껴졌는데, 대학 수업에서 배우는 공식과 원리로 배우니까 금융이 완전히 다르게 보이기 시작했어요.
+                </p>
+                <p>
+                    특히, '돈이 시간을 두고 어떻게 불어나는지'를 직접 계산해보고, 포트폴리오처럼 안전하게 투자하는 과학적인 방법들을 배웠습니다. 이제는 복잡한 뉴스나 경제 기사를 봐도 덜 어렵고, 저만의 기준으로 판단할 수 있는 자신감을 얻었습니다. 이어서 제시되는 핵심 정리 및 용어 사전을 통해 제가 이룬 학습의 깊이를 확인하실 수 있습니다.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- 1. 금융 용어 사전 (Glossary) Section - 버튼 강조 -->
+        <section id="glossary" class="mb-16">
+            <div class="flex justify-between items-center mb-6 border-b-4 pb-2 border-busan-blue">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    금융 용어 사전 (Financial Terminology Glossary) 
+                </h2>
+            </div>
+            
+            <!-- 자세히 보기 버튼 (Glossary) - 텍스트 간소화 및 강조 유지 -->
+            <a href="dict.html" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>용어 사전 보러가기</span>
+                    <!-- Right Arrow Icon -->
+                    <svg class="w-5 h-5 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </a>
+            
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <input type="text" id="searchTerm" placeholder="검색할 금융 용어를 입력하세요 (예: CAPM)"
+                       class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-busan-blue focus:border-busan-blue card-shadow transition duration-150">
+            </div>
+
+            <!-- Glossary List (Accordion) -->
+            <div id="glossaryList" class="space-y-4">
+                <!-- Data will be populated here -->
+            </div>
+        </section>
+
+        <!-- 2. 교과 핵심 정리 (Core Curriculum Summary) Section - 버튼 강조 -->
+        <section id="summary" class="mb-16">
+            <div class="flex justify-between items-center mb-6 border-b-4 pb-2 border-busan-blue">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    교과 핵심 정리 (Core Curriculum Summary) 
+                </h2>
+            </div>
+
+            <!-- 자세히 보기 버튼 (Summary) - 텍스트 간소화 및 강조 유지 -->
+            <a href="https://script.google.com/macros/s/AKfycbxZcG84R4zc25wpLoJeYNWCAV_9uc8HvstNPOllpR3VjUU06J8C01iSZ2yeCFSqGw/exec" target="_blank" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>핵심 정리 보러가기</span>
+                    <!-- Right Arrow Icon -->
+                    <svg class="w-5 h-5 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </a>
+
+            <div id="summaryList" class="space-y-4">
+                <!-- Summary Item 1: 화폐의 시간 가치 (TVM) - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        화폐의 시간 가치 (Time Value of Money, TVM)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">현재의 일정 금액이 미래의 동일 금액보다 이자 수입을 창출할 잠재력이 있기 때문에 더 가치 있다는 근본적인 금융 원리입니다. 이 개념은 미래 현금 흐름의 가치를 현재 시점으로 환산하거나(PV), 현재 투자액이 미래에 얼마가 될지(FV) 계산하는 데 필수적입니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**핵심 공식:** 미래 가치 계산 $FV = PV(1+r)^n$, 현재 가치 계산 $PV = \frac{FV}{(1+r)^n}$. 여기서 $n$은 기간, $r$은 이자율입니다.</li>
+                            <li>**응용 개념:** 연금(Annuity)의 현재/미래 가치 계산, 72의 법칙(Rule of 72)을 이용한 원금 두 배 소요 기간 추정.</li>
+                            <li>**실습 적용:** 장기 적금 목표액 산정, 주택 담보 대출의 원리금 균등 상환액 계산을 통해 실생활 재무 계획에 활용하는 방법을 학습했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 2: 포트폴리오 이론 및 분산 투자 - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        포트폴리오 이론 및 분산 투자 (Portfolio Theory & Diversification)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">해리 마코위츠(Harry Markowitz)가 정립한 현대 포트폴리오 이론(MPT)은 기대 수익률은 동일하게 유지하면서 위험(변동성)을 최소화하는 최적의 자산 조합을 찾는 방법을 제시합니다. 핵심은 **분산 투자**이며, 상관 계수($\rho$)가 1보다 작은 여러 자산을 결합함으로써 비체계적 위험(Unsystematic Risk)을 제거할 수 있음을 학습했습니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**핵심 개념:** 체계적 위험(시장 위험, 분산 불가능), 비체계적 위험(개별 위험, 분산 가능), 효율적 경계선(Efficient Frontier)을 통한 위험 대비 최대 수익률 조합 도출.</li>
+                            <li>**분산 효과:** 포트폴리오의 위험은 개별 자산의 위험의 합보다 낮아지며, 이는 자산 간의 낮은 상관 계수에 기인합니다.</li>
+                            <li>**적용:** 가상 투자 실습에서 기술주, 금융주, 채권 등 이질적인 자산을 혼합하여 시장 변동성에 대비하는 전략을 수립하고 성과를 분석했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 3: 채권 가격 결정 및 만기수익률 - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        채권 가격 결정 및 만기수익률 (Bond Pricing and YTM)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">채권의 현재 가격은 미래에 지급될 모든 현금 흐름(쿠폰 이자 및 만기 원금)을 시장 이자율로 할인한 현재 가치의 합입니다. **시장 금리와 채권 가격은 역의 관계**를 가지며, 금리가 오르면 채권 가격은 하락합니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**주요 지표:** 만기수익률(YTM, 채권 매입 시점부터 만기까지 얻는 총 수익률), 듀레이션(Duration, 금리 변화에 대한 채권 가격 민감도를 측정). 듀레이션이 길수록 금리 변동에 더 민감합니다.</li>
+                            <li>**계산 원리:** 채권 가격 $P = \sum_{t=1}^{n} \frac{C}{(1+r)^t} + \frac{F}{(1+r)^n}$ ($C$: 쿠폰, $F$: 액면가, $r$: 시장 이자율).</li>
+                            <li>**적용:** 금리 전망에 따라 장기채와 단기채 비중을 조절하거나, 이표채와 무이표채의 특성을 비교 분석하는 전략적 채권 투자 결정에 활용했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 4: 개인 재무 관리 및 리스크 관리 (NEW ADDITION) - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        개인 재무 관리 및 리스크 관리 (Personal Finance & Risk Management)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">효율적인 재무 관리는 개인의 재무 목표 달성과 삶의 질 향상의 기초입니다. 신용 관리, 부채 관리, 예산 수립 능력을 통해 개인의 재무 상태를 최적화하는 방법을 학습했습니다. 또한, 예상치 못한 위험으로부터 자산을 보호하는 보험의 원리와 기능을 이해했습니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**개인 재무:** 예산 수립의 50/30/20 규칙 이해, 신용 점수(Credit Score) 관리의 중요성 및 부채 관리 원칙(고금리 부채 우선 상환).</li>
+                            <li>**위험 관리:** 위험의 회피(Avoidance), 보유(Retention), 전가(Transfer/보험)의 3가지 관리 방법론 이해.</li>
+                            <li>**보험 원리:** 대수의 법칙(Law of Large Numbers)을 통한 보험료 산정 원리 및 도덕적 해이(Moral Hazard), 역선택(Adverse Selection)과 같은 보험 시장의 기본 문제 분석.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NEW SECTION: 교과내용 요약 보기 (Quick Summary Menu) -->
+        <section id="quick-summary" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    교과내용 요약 보기 (Curriculum At-a-Glance)
+                </h2>
+            </div>
+            
+            <!-- 수업자료.pdf 보기 버튼 추가 -->
+            <!-- NOTE: href="#"는 임시 링크입니다. 실제 PDF 파일 경로로 교체해야 합니다. -->
+            <a href="#" target="_blank" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>수업자료.pdf 보기</span>
+                    <!-- PDF Icon (File document icon with a corner fold) -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </button>
+            </a>
+            
+            <div class="space-y-3 text-lg text-gray-700 leading-relaxed">
+                <p class="font-semibold text-xl mb-3">핵심 학습 모듈:</p>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li><strong class="busan-text">Module 1:</strong> 화폐의 시간 가치 (Time Value of Money) - 미래/현재 가치, 복리 계산 원리.</li>
+                    <li><strong class="busan-text">Module 2:</strong> 포트폴리오 및 분산 투자 (Portfolio Theory) - 위험과 수익의 상충 관계, 비체계적 위험 제거.</li>
+                    <li><strong class="busan-text">Module 3:</strong> 채권 및 금리 이해 (Bond Market) - 채권 가격 결정, 만기수익률(YTM), 듀레이션 분석.</li>
+                    <li><strong class="busan-text">Module 4:</strong> 개인 재무 및 리스크 관리 (Personal Finance) - 예산, 신용, 부채 관리 및 보험의 기본 원리.</li>
+                </ul>
+                <p class="text-base text-gray-500 pt-3">
+                    더 자세한 내용(공식, 응용 개념)은 위의 '교과 핵심 정리' 섹션을 펼쳐서 확인하거나, '핵심 정리 보러가기' 버튼을 클릭해 주세요.
+                </p>
+            </div>
+        </section>
+        <!-- End of NEW SECTION -->
+
+        <!-- 3. 수업 소감 (Reflection) Section - 강조 표시 제거 -->
+        <section id="reflection" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    수업 소감 (Course Reflection)
+                </h2>
+            </div>
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
+                <p>
+                    이 수업을 듣고 가장 좋았던 건 '돈이 움직이는 원리'를 눈으로 직접 확인했다는 거예요. 복리 계산부터 분산 투자까지, 막연하게 듣던 투자가 왜 과학인지 이해가 됐습니다. 금융 지식이 어른들만의 이야기가 아니라, 고등학생인 저에게도 당장 필요한 중요한 능력이라는 것을 깨달았습니다. 앞으로는 배운 대로 용돈을 '소비'만 하지 않고 '투자'하는 습관을 들이고 싶습니다.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="busan-bg text-white py-6 mt-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm opacity-80">
+            &copy; 2025 Busan National University General Finance Portfolio. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Glossary Data
+        const glossaryData = [
+            { term: "CAPM", definition: "Capital Asset Pricing Model (자본자산 가격결정 모형): 자산의 체계적 위험(베타)과 기대 수익률 간의 선형 관계를 설명하는 모델.", category: "투자론" },
+            { term: "PV", definition: "Present Value (현재 가치): 미래에 받게 될 금액을 현재 시점의 가치로 환산한 금액. 화폐의 시간 가치 계산의 기본 개념.", category: "재무 계산" },
+            { term: "FV", definition: "Future Value (미래 가치): 현재 금액을 특정 이자율로 일정 기간 동안 투자했을 때 미래에 받게 될 금액.", category: "재무 계산" },
+            { term: "YTM", definition: "Yield to Maturity (만기수익률): 채권을 만기까지 보유했을 때 얻게 되는 총 수익률. 채권 투자 결정의 핵심 지표.", category: "채권" },
+            { term: "Beta", definition: "베타: 개별 주식의 가격 변동성이 전체 시장(예: KOSPI)의 가격 변동성에 비해 얼마나 민감한지를 나타내는 지표. CAPM에서 사용됨.", category: "투자론" },
+            { term: "ETF", definition: "Exchange Traded Fund (상장지수펀드): 특정 지수(Index)의 성과를 추종하도록 설계된 펀드로, 주식처럼 거래소에 상장되어 실시간으로 매매되는 상품.", category: "상품" },
+            { term: "PER", definition: "Price-to-Earnings Ratio (주가수익비율): 주가를 주당순이익(EPS)으로 나눈 값. 기업의 가치 평가에 사용되며, 낮을수록 저평가된 것으로 간주.", category: "기업 분석" },
+            { term: "PBR", definition: "Price-to-Book Ratio (주가순자산비율): 주가를 주당순자산(BPS)으로 나눈 값. 기업의 재무 상태 대비 주식 가치를 평가하는 지표.", category: "기업 분석" },
+            { term: "리스크", definition: "Risk (위험): 미래 수익률이 기대했던 수익률과 달라질 가능성. 금융에서는 주로 변동성(Volatility)으로 측정됨.", category: "위험 관리" },
+        ];
+
+        const glossaryList = document.getElementById('glossaryList');
+        const searchTermInput = document.getElementById('searchTerm');
+
+        // Function to render the glossary list
+        function renderGlossary(data) {
+            glossaryList.innerHTML = ''; // Clear existing list
+            
+            if (data.length === 0) {
+                glossaryList.innerHTML = '<p class="text-center text-gray-500 py-8">검색 결과가 없습니다.</p>';
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const itemHtml = `
+                    <div class="bg-white p-4 rounded-xl card-shadow border-l-4 border-busan-blue">
+                        <button id="term-toggle-${index}" class="w-full text-left font-medium text-lg flex justify-between items-center glossary-toggle">
+                            <span class="font-bold busan-text">${item.term}</span>
+                            <span class="text-sm text-gray-500 mr-2">(${item.category})</span>
+                            <svg class="w-5 h-5 transition-transform duration-300 transform ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <p class="text-gray-700">${item.definition}</p>
+                        </div>
+                    </div>
+                `;
+                glossaryList.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            // Reattach event listeners to new elements
+            document.querySelectorAll('.glossary-toggle').forEach(button => {
+                button.addEventListener('click', toggleAccordion);
+            });
+        }
+
+        // Accordion toggle function
+        function toggleAccordion(event) {
+            const button = event.currentTarget;
+            const content = button.nextElementSibling;
+            
+            // Check if it is already active
+            const isActive = content.classList.contains('active');
+
+            // Close all other open items in the same section (optional but improves UX)
+            button.closest('section').querySelectorAll('.accordion-content.active').forEach(activeContent => {
+                if (activeContent !== content) {
+                    activeContent.classList.remove('active');
+                    activeContent.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                }
+            });
+
+            // Toggle the current item
+            if (isActive) {
+                content.classList.remove('active');
+                button.querySelector('svg').classList.remove('rotate-180');
+            } else {
+                content.classList.add('active');
+                button.querySelector('svg').classList.add('rotate-180');
+            }
+        }
+
+        // Search functionality
+        searchTermInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filteredData = glossaryData.filter(item => 
+                item.term.toLowerCase().includes(query) || 
+                item.definition.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query)
+            );
+            renderGlossary(filteredData);
+        });
+
+        // Initialize on load
+        window.onload = function() {
+            // Initial rendering of glossary
+            renderGlossary(glossaryData);
+
+            // Attach listeners for Core Summary items
+            document.querySelectorAll('.summary-toggle').forEach(button => {
+                button.addEventListener('click', toggleAccordion);
+            });
+        }
+    </script>
+</body>
+</html>
