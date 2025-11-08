@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>금융, 기술, 그리고 4차 산업혁명의 융합 심층 보고서</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-brown': '#374151', // Stone 800: Deep Cocoa Brown
+                        'secondary-brown': '#f59e0b', // Amber 600: Warm Caramel Accent
+                        'light-brown': '#f5f5f4', // Stone 100: Cream/Beige Background
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        /* 웹페이지 보고서 스타일 */
+        body {
+            background-color: #f8fafc; /* 밝은 회색 배경 유지 */
+            scroll-behavior: smooth; /* 부드러운 스크롤 추가 */
+        }
+        .container-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px 32px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            border-bottom: 4px solid #374151; /* primary-brown */
+            padding-bottom: 8px;
+            margin-bottom: 32px;
+        }
+        .subsection-title {
+            border-left: 5px solid #f59e0b; /* secondary-brown */
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+        .highlight {
+            color: #f59e0b; /* secondary-brown */
+            font-weight: 600;
+        }
+
+        /* 고정 메뉴 스타일 */
+        .fixed-nav {
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            transition: color 0.2s, background-color 0.2s;
+        }
+        .nav-link:hover {
+            background-color: rgba(245, 158, 11, 0.2); /* secondary-brown/20 */
+            color: #374151; /* primary-brown */
+        }
+    </style>
+
+    <script>
+        // 서버 측 함수(saveFeedback)의 실행 결과를 처리하는 핸들러
+        function handleResponse(result) {
+            const feedbackTextarea = document.getElementById('feedback_text');
+            const feedbackMessage = document.getElementById('feedback_message');
+            const submitButton = document.getElementById('submit_button');
+
+            // 버튼 상태 재설정 및 메시지 표시
+            submitButton.disabled = false;
+            submitButton.innerHTML = '피드백 제출하기 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>';
+            feedbackMessage.classList.remove('hidden');
+
+            if (result.status === 'success') {
+                feedbackMessage.textContent = result.message;
+                feedbackMessage.classList.remove('text-red-700', 'bg-red-100', 'border-red-300');
+                feedbackMessage.classList.add('text-green-700', 'bg-green-100', 'border-green-300');
+                feedbackTextarea.value = ''; // 성공 시 입력 칸 초기화
+            } else {
+                // Apps Script에서 오류가 발생하여 status: 'error'를 반환한 경우
+                handleError(new Error(result.message));
+            }
+        }
+
+        // google.script.run 자체가 실패했을 때(권한 문제 등) 처리하는 핸들러
+        function handleError(error) {
+            const feedbackMessage = document.getElementById('feedback_message');
+            const submitButton = document.getElementById('submit_button');
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = '피드백 제출하기 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>';
+
+            console.error('Apps Script Error:', error);
+            feedbackMessage.textContent = `제출 오류: ${error.message}. (배포 및 권한 설정 확인 필요)`;
+            feedbackMessage.classList.remove('hidden');
+            feedbackMessage.classList.remove('text-green-700', 'bg-green-100', 'border-green-300');
+            feedbackMessage.classList.add('text-red-700', 'bg-red-100', 'border-red-300');
+        }
+
+        // 폼 제출 함수 (google.script.run 사용)
+        function submitFeedback(event) {
+            event.preventDefault(); // 폼 제출의 기본 동작 방지 (Apps Script에서는 필요 없음)
+
+            const feedbackTextarea = document.getElementById('feedback_text');
+            const feedbackMessage = document.getElementById('feedback_message');
+            const submitButton = document.getElementById('submit_button');
+            const feedback = feedbackTextarea.value.trim();
+
+            feedbackMessage.classList.add('hidden');
+            
+            if (feedback === "") {
+                feedbackMessage.textContent = '피드백 내용을 입력해주세요.';
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.remove('text-green-700', 'bg-green-100', 'border-green-300');
+                feedbackMessage.classList.add('text-red-700', 'bg-red-100', 'border-red-300');
+                return;
+            }
+
+            // 제출 중 상태 표시
+            submitButton.disabled = true;
+            submitButton.innerHTML = '제출 중...';
+
+            // 💡 핵심 수정: google.script.run을 사용하여 서버 함수 saveFeedback 호출
+            google.script.run
+                .withSuccessHandler(handleResponse) // 성공적으로 실행되면 handleResponse 호출
+                .withFailureHandler(handleError)   // 서버 측 오류(권한 등) 발생 시 handleError 호출
+                .saveFeedback(feedback);           // Apps Script 파일의 saveFeedback 함수를 호출하며 피드백 내용을 인수로 전달
+        }
+    </script>
+</head>
+<body class="font-sans">
+
+    <!-- 고정 네비게이션 메뉴 -->
+    <nav class="fixed-nav bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center h-16 overflow-x-auto whitespace-nowrap">
+                <a href="#summary" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    0. 핵심 요약
+                </a>
+                <a href="#macro" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    1. 경영 패러다임
+                </a>
+                <a href="#technology" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    2. 기술적 기반
+                </a>
+                <a href="#data" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    3. 데이터 통제권
+                </a>
+                <a href="#fintech" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    4. 핀테크 혁명
+                </a>
+                <a href="#applications" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    5. 응용 서비스
+                </a>
+                <a href="#conclusion" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    6. 결론
+                </a>
+                <a href="#feedback" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
+                    7. 피드백
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="bg-primary-brown text-white pt-24 pb-12 mb-8"> <!-- 메뉴 공간 확보 위해 pt-24로 변경 -->
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-2">
+                🟫 금융, 기술, 그리고 4차 산업혁명의 융합
+            </h1>
+            <p class="text-2xl font-light opacity-80 mt-4">디지털 전환 시대의 금융 산업 재편 심층 보고서</p>
+        </div>
+    </header>
+
+    <div class="container-content rounded-xl">
+
+        <!-- 메인 요약 (슬라이드 1 기반) -->
+        <section id="summary" class="mb-12 p-6 border-2 border-secondary-brown rounded-lg bg-light-brown">
+            <h2 class="text-3xl font-bold mb-4 text-primary-brown">💡 핵심 메시지: 경계의 소멸과 새로운 가치 창출</h2>
+            <ul class="space-y-3 text-lg md:text-xl list-none text-gray-800">
+                <li><span class="font-bold text-primary-brown">배경:</span> 4차 산업혁명(4th IR) 기술과 경영 철학의 융합이 금융의 근간을 바꿉니다.</li>
+                <li><span class="font-bold text-primary-brown">변화 방향:</span> <span class="highlight">디지털 우선(Digital-First)</span> 모델로의 전환이 가속화되고 있습니다.</li>
+                <li><span class="font-bold text-primary-brown">핵심 요소:</span> <span class="highlight">데이터(핵심 자산)</span>와 <span class="highlight">고객 중심주의</span>를 중심으로 재편됩니다.</li>
+                <li><span class="font-bold text-primary-brown">동력:</span> 디지털 전환(DX)은 AI, 빅데이터, 클라우드, IoT를 통해 구현됩니다.</li>
+            </ul>
+        </section>
+
+        <!-- 섹션 1: 거시 환경과 경영 패러다임의 변화 (슬라이드 2 기반) -->
+        <section id="macro" class="mb-12">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">1. 거시 환경과 경영 패러다임의 변화</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🌍 글로벌 환경: 불확실성 증대</h3>
+                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                    <li><span class="font-semibold">보호 무역:</span> 상호 관세 부과와 공급망 재편으로 경제 블록화 심화.</li>
+                    <li><span class="font-semibold">결과:</span> 금융 시장의 변동성 증가와 만성적인 인플레이션 압력 가중.</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">📈 경영 철학: 이윤에서 공유 가치로</h3>
+                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                    <li><span class="highlight">CSR/CSV:</span> 단순 이윤 환원(CSR)을 넘어 사회 문제 해결을 통한 가치 공동 창출(CSV) 지향.</li>
+                    <li><span class="highlight">ESG:</span> 환경, 사회, 지배구조가 <span class="font-bold text-amber-800">필수적인 투자 및 경영 평가 요소</span>로 자리매김하며 장기적 기업 가치를 결정.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 섹션 2: 4차 IR의 기술적 기반 (슬라이드 3 기반) -->
+        <section id="technology" class="mb-12">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">2. 4차 IR의 기술적 기반</h2>
+            
+            <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🌐 4차 IR 정의와 디지털 전환 (DX)</h3>
+            <p class="text-lg mb-6 text-gray-700">
+                <span class="highlight">4차 IR 정의:</span> 사이버 물리 시스템(CPS) 기반의 초지능, 초연결 사회 구현.
+            </p>
+
+            <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">핵심 기술 조합</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center mb-8">
+                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
+                    <div class="text-lg font-bold">DNA 조합</div>
+                    <div class="text-2xl font-extrabold mt-1">Data, Network, AI</div>
+                </div>
+                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
+                    <div class="text-lg font-bold">ABC 조합</div>
+                    <div class="text-2xl font-extrabold mt-1">AI, Big Data, Cloud</div>
+                </div>
+                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
+                    <div class="text-lg font-bold">클라우드 컴퓨팅</div>
+                    <div class="text-xl font-extrabold mt-1">유연성 및 확장성 기반 (IaaS, PaaS, SaaS)</div>
+                </div>
+            </div>
+            <p class="text-lg text-gray-700">
+                <span class="highlight">디지털 전환(DX)은</span> 이 기술들을 통합하여 고객 경험을 혁신하고 비즈니스 모델을 재설계하는 핵심 프로세스입니다.
+            </p>
+        </section>
+
+        <!-- 섹션 3: 데이터 패러다임: 통제권의 이동 (슬라이드 4 기반) -->
+        <section id="data" class="mb-12">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">3. 데이터 패러다임: 통제권의 이동</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">📊 빅데이터의 가치</h3>
+                    <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                        <li><span class="highlight">특성:</span> 5가지 V (Volume, Velocity, Variety, Value, Variable)</li>
+                        <li><span class="font-semibold">목표:</span> 단순 분석을 넘어 행동 예측과 궁극적인 가치 창출에 중점.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🛡️ 마이데이터 (MyData) 시대</h3>
+                    <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                        <li><span class="highlight">원칙:</span> 개인에게 데이터 통제 및 활용 주권 보장.</li>
+                        <li><span class="font-semibold">금융 영향:</span> 고객 동의 기반의 정보 통합 및 <span class="font-bold text-primary-brown">초개인화된 금융 상품 추천</span> 가능.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 섹션 4: 핀테크 혁명: 시장 재편의 동력 (슬라이드 5 기반) -->
+        <section id="fintech" class="mb-12">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">4. 핀테크 혁명: 시장 재편의 동력</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">⚔️ 핀테크 vs. 테크핀의 대결</h3>
+                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                    <li><span class="highlight">핀테크:</span> 금융의 효율성 개선에 초점 (기술적 민첩성, B2B 협력).</li>
+                    <li><span class="highlight">테크핀:</span> 거대 IT 기업이 플랫폼과 데이터를 기반으로 <span class="font-bold text-amber-800">금융 시장을 주도</span> (직접 경쟁).</li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🚀 핀테크 진화의 핵심 단계 (3.0)</h3>
+                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
+                    <li><span class="highlight">2.0:</span> P2P, 로보어드바이저 등 스타트업의 도전 및 경쟁 심화.</li>
+                    <li><span class="highlight">3.0 (내재형 금융, Embedded Finance):</span> 금융 서비스가 비금융 플랫폼에 완전히 녹아들어 <span class="font-bold text-primary-brown">인식 없이 이용되는</span> 초연결 환경 구축.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 섹션 5: 주요 핀테크 응용 서비스 (슬라이드 6 기반) -->
+        <section id="applications" class="mb-12">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">5. 주요 핀테크 응용 서비스</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-800">
+                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
+                    <div class="text-2xl font-bold mb-2 text-primary-brown">간편 결제</div>
+                    <p class="text-lg">토큰화/생체 인증을 통해 신속성과 보안성을 확보. BNPL(선구매 후지불) 서비스와 결합하여 시장 확장 중.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
+                    <div class="text-2xl font-bold mb-2 text-primary-brown">로보어드바이저</div>
+                    <p class="text-lg">AI 알고리즘 기반의 <span class="highlight">저비용 자동 자산 관리</span> 제공. 금융 서비스를 소액 투자자에게 대중화하는 데 기여.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
+                    <div class="text-2xl font-bold mb-2 text-primary-brown">인슈어테크</div>
+                    <p class="text-lg">IoT/빅데이터를 활용하여 <span class="highlight">개인 맞춤형 위험 평가</span>(UBI)를 실현하고, AI로 청구 처리 과정을 가속화.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
+                    <div class="text-2xl font-bold mb-2 text-primary-brown">P2P 금융</div>
+                    <p class="text-lg">비금융 데이터를 활용한 <span class="highlight">대안적 신용 평가 모델</span>로 중신용자 대상 대출 시장을 혁신.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 결론 -->
+        <section id="conclusion" class="mt-12 pt-6 border-t-2 border-gray-200">
+            <div class="text-center text-3xl font-extrabold text-primary-brown p-6 bg-secondary-brown/20 rounded-lg shadow-inner">
+                결론: 민첩성(Agility)과 윤리적 책임(ESG, XAI)의 확보가 미래 금융 산업 성공의 열쇠입니다.
+            </div>
+        </section>
+
+        <!-- 피드백 입력 섹션 추가 -->
+        <section id="feedback" class="mt-12 pt-6">
+            <h2 class="text-4xl font-extrabold section-title text-primary-brown">7. 피드백 입력</h2>
+            <div class="p-6 border border-gray-300 rounded-xl bg-light-brown shadow-lg">
+                <label for="feedback_text" class="block text-xl font-bold mb-3 text-primary-brown">
+                    보고서/발표에 대한 소감 및 의견을 남겨주세요:
+                </label>
+                <textarea 
+                    id="feedback_text" 
+                    rows="6" 
+                    class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-secondary-brown transition duration-200 text-gray-800 shadow-inner" 
+                    placeholder="개선 사항, 좋았던 점, 궁금증 등 건설적인 의견을 환영합니다."></textarea>
+                
+                <button 
+                    id="submit_button"
+                    onclick="submitFeedback(event)" 
+                    class="mt-4 w-full md:w-auto px-8 py-3 bg-secondary-brown text-white font-bold rounded-full shadow-lg hover:bg-secondary-brown/80 transition duration-200 transform hover:scale-[1.01] flex items-center justify-center">
+                    피드백 제출하기 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>
+                </button>
+
+                <p id="feedback_message" class="hidden mt-4 text-center text-lg font-semibold p-3 rounded-lg border">
+                    <!-- 메시지는 JavaScript를 통해 표시됩니다. -->
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center py-8 text-gray-500 text-sm">
+        &copy; 2024. 4차 산업혁명과 금융 보고서. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
