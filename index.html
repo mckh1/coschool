@@ -3,367 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>금융, 기술, 그리고 4차 산업혁명의 융합 심층 보고서</title>
+    <title>부산대학교 금융일반 포트폴리오</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-brown': '#374151', // Stone 800: Deep Cocoa Brown
-                        'secondary-brown': '#f59e0b', // Amber 600: Warm Caramel Accent
-                        'light-brown': '#f5f5f4', // Stone 100: Cream/Beige Background
-                    }
-                }
-            }
-        }
-    </script>
+    <script> window.chtlConfig = { chatbotId: "3442669387" } </script>
+<script async data-id="3442669387" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+    <!-- Google Font - Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        
-        /* 웹페이지 보고서 스타일 */
-        body {
-            background-color: #f8fafc; /* 밝은 회색 배경 유지 */
-            scroll-behavior: smooth; /* 부드러운 스크롤 추가 */
+        /* Custom styles and setting Noto Sans KR as primary Korean font */
+        :root {
+            --busan-blue: #004699; /* 부산대 상징색 중 하나 */
+            --busan-light: #f3f4f6;
         }
-        .container-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px 32px;
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: var(--busan-light);
+        }
+        .busan-bg {
+            background-color: var(--busan-blue);
+        }
+        .busan-text {
+            color: var(--busan-blue);
+        }
+        /* card-shadow remains for the sections, but we'll use shadow-xl for the buttons */
+        .card-shadow {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .section-title {
-            border-bottom: 4px solid #374151; /* primary-brown */
-            padding-bottom: 8px;
-            margin-bottom: 32px;
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
         }
-        .subsection-title {
-            border-left: 5px solid #f59e0b; /* secondary-brown */
-            padding-left: 12px;
-            margin-bottom: 20px;
-        }
-        .highlight {
-            color: #f59e0b; /* secondary-brown */
-            font-weight: 600;
-        }
-
-        /* 고정 메뉴 스타일 */
-        .fixed-nav {
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .nav-link {
-            transition: color 0.2s, background-color 0.2s;
-        }
-        .nav-link:hover {
-            background-color: rgba(245, 158, 11, 0.2); /* secondary-brown/20 */
-            color: #374151; /* primary-brown */
+        .accordion-content.active {
+            max-height: 600px; /* 늘어난 콘텐츠를 위해 Max Height 증가 */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
     </style>
-
-    <script>
-        // 서버 측 함수(saveFeedback)의 실행 결과를 처리하는 핸들러
-        function handleResponse(result) {
-            const feedbackTextarea = document.getElementById('feedback_text');
-            const feedbackMessage = document.getElementById('feedback_message');
-            const submitButton = document.getElementById('submit_button');
-
-            // 버튼 상태 재설정 및 메시지 표시
-            submitButton.disabled = false;
-            submitButton.innerHTML = '피드백 제출하기 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>';
-            feedbackMessage.classList.remove('hidden');
-
-            if (result.status === 'success') {
-                feedbackMessage.textContent = result.message;
-                feedbackMessage.classList.remove('text-red-700', 'bg-red-100', 'border-red-300');
-                feedbackMessage.classList.add('text-green-700', 'bg-green-100', 'border-green-300');
-                feedbackTextarea.value = ''; // 성공 시 입력 칸 초기화
-            } else {
-                // Apps Script에서 오류가 발생하여 status: 'error'를 반환한 경우
-                handleError(new Error(result.message));
-            }
-        }
-
-        // google.script.run 자체가 실패했을 때(권한 문제 등) 처리하는 핸들러
-        function handleError(error) {
-            const feedbackMessage = document.getElementById('feedback_message');
-            const submitButton = document.getElementById('submit_button');
-
-            submitButton.disabled = false;
-            submitButton.innerHTML = '피드백 제출하기 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>';
-
-            console.error('Apps Script Error:', error);
-            feedbackMessage.textContent = `제출 오류: ${error.message}. (배포 및 권한 설정 확인 필요)`;
-            feedbackMessage.classList.remove('hidden');
-            feedbackMessage.classList.remove('text-green-700', 'bg-green-100', 'border-green-300');
-            feedbackMessage.classList.add('text-red-700', 'bg-red-100', 'border-red-300');
-        }
-
-        // 폼 제출 함수 (google.script.run 사용)
-        function submitFeedback(event) {
-            event.preventDefault(); // 폼 제출의 기본 동작 방지 (Apps Script에서는 필요 없음)
-
-            const feedbackTextarea = document.getElementById('feedback_text');
-            const feedbackMessage = document.getElementById('feedback_message');
-            const submitButton = document.getElementById('submit_button');
-            const feedback = feedbackTextarea.value.trim();
-
-            feedbackMessage.classList.add('hidden');
-            
-            if (feedback === "") {
-                feedbackMessage.textContent = '피드백 내용을 입력해주세요.';
-                feedbackMessage.classList.remove('hidden');
-                feedbackMessage.classList.remove('text-green-700', 'bg-green-100', 'border-green-300');
-                feedbackMessage.classList.add('text-red-700', 'bg-red-100', 'border-red-300');
-                return;
-            }
-
-            // 제출 중 상태 표시
-            submitButton.disabled = true;
-            submitButton.innerHTML = '제출 중...';
-
-            // 💡 핵심 수정: google.script.run을 사용하여 서버 함수 saveFeedback 호출
-            google.script.run
-                .withSuccessHandler(handleResponse) // 성공적으로 실행되면 handleResponse 호출
-                .withFailureHandler(handleError)    // 서버 측 오류(권한 등) 발생 시 handleError 호출
-                .saveFeedback(feedback);            // Apps Script 파일의 saveFeedback 함수를 호출하며 피드백 내용을 인수로 전달
-        }
-    </script>
 </head>
-<body class="font-sans">
+<body class="antialiased text-gray-800">
 
-    <!-- 고정 네비게이션 메뉴 -->
-    <nav class="fixed-nav bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-center h-16 overflow-x-auto whitespace-nowrap">
-                <a href="#summary" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    0. 핵심 요약
-                </a>
-                <a href="#macro" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    1. 경영 패러다임
-                </a>
-                <a href="#technology" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    2. 기술적 기반
-                </a>
-                <a href="#data" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    3. 데이터 통제권
-                </a>
-                <a href="#fintech" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    4. 핀테크 혁명
-                </a>
-                <a href="#applications" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    5. 응용 서비스
-                </a>
-                <a href="#conclusion" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    6. 결론
-                </a>
-                <a href="#feedback" class="nav-link text-gray-700 hover:text-primary-brown px-3 py-2 text-sm font-medium flex items-center border-b-2 border-transparent hover:border-secondary-brown">
-                    7. 피드백
-                </a>
-            </div>
-        </div>
-    </nav>
-    
-    <header class="bg-primary-brown text-white pt-24 pb-12 mb-8"> <!-- 메뉴 공간 확보 위해 pt-24로 변경 -->
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-2">
-                🟫 금융, 기술, 그리고 4차 산업혁명의 융합
+    <!-- Header / Hero Section -->
+    <header class="busan-bg text-white py-12 md:py-16 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-3 tracking-tight">
+                금융일반 교과 연계형 포트폴리오
             </h1>
-            <p class="text-2xl font-light opacity-80 mt-4">디지털 전환 시대의 금융 산업 재편 심층 보고서</p>
+            <p class="text-xl sm:text-2xl font-light opacity-90">
+                부산대학교 금융일반 과목 학습 성과 및 응용 사례
+            </p>
+            <div class="mt-4 text-sm font-medium">
+                <span class="inline-block py-1 px-3 rounded-full bg-white bg-opacity-20">
+                    강민규 (내성고등학교 1학년) | 교과 연계 이수
+                </span>
+            </div>
         </div>
     </header>
 
-    <div class="container-content rounded-xl">
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
-        <!-- 메인 요약 (슬라이드 1 기반) -->
-        <section id="summary" class="mb-12 p-6 border-2 border-secondary-brown rounded-lg bg-light-brown">
-            <h2 class="text-3xl font-bold mb-4 text-primary-brown">💡 핵심 메시지: 경계의 소멸과 새로운 가치 창출</h2>
-            <ul class="space-y-3 text-lg md:text-xl list-none text-gray-800">
-                <li><span class="font-bold text-primary-brown">배경:</span> 4차 산업혁명(4th IR) 기술과 경영 철학의 융합이 금융의 근간을 바꿉니다.</li>
-                <li><span class="font-bold text-primary-brown">변화 방향:</span> <span class="highlight">디지털 우선(Digital-First)</span> 모델로의 전환이 가속화되고 있습니다.</li>
-                <li><span class="font-bold text-primary-brown">핵심 요소:</span> <span class="highlight">데이터(핵심 자산)</span>와 <span class="highlight">고객 중심주의</span>를 중심으로 재편됩니다.</li>
-                <li><span class="font-bold text-primary-brown">동력:</span> 디지털 전환(DX)은 AI, 빅데이터, 클라우드, IoT를 통해 구현됩니다.</li>
-            </ul>
-        </section>
-
-        <!-- 섹션 1: 거시 환경과 경영 패러다임의 변화 (슬라이드 2 기반) -->
-        <section id="macro" class="mb-12">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">1. 거시 환경과 경영 패러다임의 변화</h2>
-            
-            <div class="mb-8">
-                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🌍 글로벌 환경: 불확실성 증대</h3>
-                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                    <li><span class="font-semibold">보호 무역:</span> 상호 관세 부과와 공급망 재편으로 경제 블록화 심화.</li>
-                    <li><span class="font-semibold">결과:</span> 금융 시장의 변동성 증가와 만성적인 인플레이션 압력 가중.</li>
-                </ul>
+        <!-- 0. 포트폴리오 소개 및 학습 여정 (Introduction) Section - 강조 표시 제거 -->
+        <section id="introduction" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    포트폴리오 소개 및 학습 여정 
+                </h2>
             </div>
-
-            <div class="mb-8">
-                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">📈 경영 철학: 이윤에서 공유 가치로</h3>
-                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                    <li><span class="highlight">CSR/CSV:</span> 단순 이윤 환원(CSR)을 넘어 사회 문제 해결을 통한 가치 공동 창출(CSV) 지향.</li>
-                    <li><span class="highlight">ESG:</span> 환경, 사회, 지배구조가 <span class="font-bold text-amber-800">필수적인 투자 및 경영 평가 요소</span>로 자리매김하며 장기적 기업 가치를 결정.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 섹션 2: 4차 IR의 기술적 기반 (슬라이드 3 기반) -->
-        <section id="technology" class="mb-12">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">2. 4차 IR의 기술적 기반</h2>
-            
-            <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🌐 4차 IR 정의와 디지털 전환 (DX)</h3>
-            <p class="text-lg mb-6 text-gray-700">
-                <span class="highlight">4차 IR 정의:</span> 사이버 물리 시스템(CPS) 기반의 초지능, 초연결 사회 구현.
-            </p>
-
-            <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">핵심 기술 조합</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center mb-8">
-                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
-                    <div class="text-lg font-bold">DNA 조합</div>
-                    <div class="text-2xl font-extrabold mt-1">Data, Network, AI</div>
-                </div>
-                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
-                    <div class="text-lg font-bold">ABC 조합</div>
-                    <div class="text-2xl font-extrabold mt-1">AI, Big Data, Cloud</div>
-                </div>
-                <div class="bg-primary-brown text-white p-4 rounded-lg shadow-md">
-                    <div class="text-lg font-bold">클라우드 컴퓨팅</div>
-                    <div class="text-xl font-extrabold mt-1">유연성 및 확장성 기반 (IaaS, PaaS, SaaS)</div>
-                </div>
-            </div>
-            <p class="text-lg text-gray-700">
-                <span class="highlight">디지털 전환(DX)은</span> 이 기술들을 통합하여 고객 경험을 혁신하고 비즈니스 모델을 재설계하는 핵심 프로세스입니다.
-            </p>
-        </section>
-
-        <!-- 섹션 3: 데이터 패러다임: 통제권의 이동 (슬라이드 4 기반) -->
-        <section id="data" class="mb-12">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">3. 데이터 패러다임: 통제권의 이동</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">📊 빅데이터의 가치</h3>
-                    <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                        <li><span class="highlight">특성:</span> 5가지 V (Volume, Velocity, Variety, Value, Variable)</li>
-                        <li><span class="font-semibold">목표:</span> 단순 분석을 넘어 행동 예측과 궁극적인 가치 창출에 중점.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🛡️ 마이데이터 (MyData) 시대</h3>
-                    <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                        <li><span class="highlight">원칙:</span> 개인에게 데이터 통제 및 활용 주권 보장.</li>
-                        <li><span class="font-semibold">금융 영향:</span> 고객 동의 기반의 정보 통합 및 <span class="font-bold text-primary-brown">초개인화된 금융 상품 추천</span> 가능.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 섹션 4: 핀테크 혁명: 시장 재편의 동력 (슬라이드 5 기반) -->
-        <section id="fintech" class="mb-12">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">4. 핀테크 혁명: 시장 재편의 동력</h2>
-            
-            <!-- 추가된 제미나이 리포트 버튼 -->
-            <a href="https://gemini.google.com/share/1d439a36e79e" target="_blank" class="inline-block mb-8 group">
-                <button class="flex items-center space-x-2 bg-secondary-brown hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-full shadow-xl transition duration-300 transform group-hover:scale-105">
-                    <span>AI 심층 분석 리포트 보기</span>
-                    <!-- External Link Icon -->
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                </button>
-            </a>
-            <!-- 추가 끝 -->
-
-            <div class="mb-8">
-                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">⚔️ 핀테크 vs. 테크핀의 대결</h3>
-                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                    <li><span class="highlight">핀테크:</span> 금융의 효율성 개선에 초점 (기술적 민첩성, B2B 협력).</li>
-                    <li><span class="highlight">테크핀:</span> 거대 IT 기업이 플랫폼과 데이터를 기반으로 <span class="font-bold text-amber-800">금융 시장을 주도</span> (직접 경쟁).</li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-3xl font-semibold subsection-title text-secondary-brown">🚀 핀테크 진화의 핵심 단계 (3.0)</h3>
-                <ul class="space-y-2 text-lg text-gray-700 list-disc ml-6">
-                    <li><span class="highlight">2.0:</span> P2P, 로보어드바이저 등 스타트업의 도전 및 경쟁 심화.</li>
-                    <li><span class="highlight">3.0 (내재형 금융, Embedded Finance):</span> 금융 서비스가 비금융 플랫폼에 완전히 녹아들어 <span class="font-bold text-primary-brown">인식 없이 이용되는</span> 초연결 환경 구축.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 섹션 5: 주요 핀테크 응용 서비스 (슬라이드 6 기반) -->
-        <section id="applications" class="mb-12">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">5. 주요 핀테크 응용 서비스</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-800">
-                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
-                    <div class="text-2xl font-bold mb-2 text-primary-brown">간편 결제</div>
-                    <p class="text-lg">토큰화/생체 인증을 통해 신속성과 보안성을 확보. BNPL(선구매 후지불) 서비스와 결합하여 시장 확장 중.</p>
-                </div>
-                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
-                    <div class="text-2xl font-bold mb-2 text-primary-brown">로보어드바이저</div>
-                    <p class="text-lg">AI 알고리즘 기반의 <span class="highlight">저비용 자동 자산 관리</span> 제공. 금융 서비스를 소액 투자자에게 대중화하는 데 기여.</p>
-                </div>
-                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
-                    <div class="text-2xl font-bold mb-2 text-primary-brown">인슈어테크</div>
-                    <p class="text-lg">IoT/빅데이터를 활용하여 <span class="highlight">개인 맞춤형 위험 평가</span>(UBI)를 실현하고, AI로 청구 처리 과정을 가속화.</p>
-                </div>
-                <div class="p-6 rounded-lg bg-light-brown border-l-4 border-secondary-brown shadow-md">
-                    <div class="text-2xl font-bold mb-2 text-primary-brown">P2P 금융</div>
-                    <p class="text-lg">비금융 데이터를 활용한 <span class="highlight">대안적 신용 평가 모델</span>로 중신용자 대상 대출 시장을 혁신.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 결론 -->
-        <section id="conclusion" class="mt-12 pt-6 border-t-2 border-gray-200">
-            <div class="text-center text-3xl font-extrabold text-primary-brown p-6 bg-secondary-brown/20 rounded-lg shadow-inner">
-                결론: 민첩성(Agility)과 윤리적 책임(ESG, XAI)의 확보가 미래 금융 산업 성공의 열쇠입니다.
-            </div>
-        </section>
-
-        <!-- 피드백 입력 섹션 추가 -->
-        <section id="feedback" class="mt-12 pt-6">
-            <h2 class="text-4xl font-extrabold section-title text-primary-brown">7. 피드백 입력</h2>
-            <div class="p-6 border border-gray-300 rounded-xl bg-light-brown shadow-lg">
-                <label for="feedback_text" class="block text-xl font-bold mb-3 text-primary-brown">
-                    보고서/발표에 대한 소감 및 의견을 남겨주세요:
-                </label>
-                <textarea 
-                    id="feedback_text" 
-                    rows="6" 
-                    class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-secondary-brown transition duration-200 text-gray-800 shadow-inner" 
-                    placeholder="개선 사항, 좋았던 점, 궁금증 등 건설적인 의견을 환영합니다."></textarea>
-                
-                <button 
-                    id="submit_button"
-                    onclick="submitFeedback(event)" 
-                    class="mt-4 w-full md:w-auto px-8 py-3 bg-secondary-brown text-white font-bold rounded-full shadow-lg hover:bg-secondary-brown/80 transition duration-200 transform hover:scale-[1.01] flex items-center justify-center">
-                    피드백 제출하기 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.76-1.554L2 17l1.3-3.7A9.09 9.09 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.42 5.5a1 1 0 100 2h1.16a1 1 0 100-2h-1.16zm-2.43 5.4a1 1 0 011.41-1.42l3 3a1 1 0 01-1.41 1.42l-3-3z" clip-rule="evenodd" /></svg>
-                </button>
-
-                <p id="feedback_message" class="hidden mt-4 text-center text-lg font-semibold p-3 rounded-lg border">
-                    <!-- 메시지는 JavaScript를 통해 표시됩니다. -->
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
+                <p>
+                    이 포트폴리오는 부산대학교에서 '금융일반' 수업을 들으면서 제가 뭘 배웠는지, 그리고 이 지식을 제 용돈이나 미래 투자에 어떻게 써먹을지 정리한 거예요. 전에는 '재테크'가 막연하게 어렵게만 느껴졌는데, 대학 수업에서 배우는 공식과 원리로 배우니까 금융이 완전히 다르게 보이기 시작했어요.
+                </p>
+                <p>
+                    특히, '돈이 시간을 두고 어떻게 불어나는지'를 직접 계산해보고, 포트폴리오처럼 안전하게 투자하는 과학적인 방법들을 배웠습니다. 이제는 복잡한 뉴스나 경제 기사를 봐도 덜 어렵고, 저만의 기준으로 판단할 수 있는 자신감을 얻었습니다. 이어서 제시되는 핵심 정리 및 용어 사전을 통해 제가 이룬 학습의 깊이를 확인하실 수 있습니다.
                 </p>
             </div>
         </section>
 
-    </div>
 
-    <footer class="text-center py-8 text-gray-500 text-sm">
-        &copy; 2024. 4차 산업혁명과 금융 보고서. All Rights Reserved.
+        <!-- 1. 금융 용어 사전 (Glossary) Section - 버튼 강조 -->
+        <section id="glossary" class="mb-16">
+            <div class="flex justify-between items-center mb-6 border-b-4 pb-2 border-busan-blue">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    금융 용어 사전 (Financial Terminology Glossary) 
+                </h2>
+            </div>
+            
+            <!-- 자세히 보기 버튼 (Glossary) - 텍스트 간소화 및 강조 유지 -->
+            <a href="dict.html" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>용어 사전 보러가기</span>
+                    <!-- Right Arrow Icon -->
+                    <svg class="w-5 h-5 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </a>
+            
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <input type="text" id="searchTerm" placeholder="검색할 금융 용어를 입력하세요 (예: CAPM)"
+                       class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-busan-blue focus:border-busan-blue card-shadow transition duration-150">
+            </div>
+
+            <!-- Glossary List (Accordion) -->
+            <div id="glossaryList" class="space-y-4">
+                <!-- Data will be populated here -->
+            </div>
+        </section>
+
+        <!-- 2. 교과 핵심 정리 (Core Curriculum Summary) Section - 버튼 강조 -->
+        <section id="summary" class="mb-16">
+            <div class="flex justify-between items-center mb-6 border-b-4 pb-2 border-busan-blue">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    교과 핵심 정리 (Core Curriculum Summary) 
+                </h2>
+            </div>
+
+            <!-- 자세히 보기 버튼 (Summary) - 텍스트 간소화 및 강조 유지 -->
+            <a href="https://script.google.com/macros/s/AKfycbxXcG84R4zc25wpLoJeYNWCAV_9uc8HvstNPOllpR3VjUU06J8C01iSZ2yeCFSqGw/exec" target="_blank" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>핵심 정리 보러가기</span>
+                    <!-- Right Arrow Icon -->
+                    <svg class="w-5 h-5 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </a>
+
+            <div id="summaryList" class="space-y-4">
+                <!-- Summary Item 1: 화폐의 시간 가치 (TVM) - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        화폐의 시간 가치 (Time Value of Money, TVM)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">현재의 일정 금액이 미래의 동일 금액보다 이자 수입을 창출할 잠재력이 있기 때문에 더 가치 있다는 근본적인 금융 원리입니다. 이 개념은 미래 현금 흐름의 가치를 현재 시점으로 환산하거나(PV), 현재 투자액이 미래에 얼마가 될지(FV) 계산하는 데 필수적입니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**핵심 공식:** 미래 가치 계산 $FV = PV(1+r)^n$, 현재 가치 계산 $PV = \frac{FV}{(1+r)^n}$. 여기서 $n$은 기간, $r$은 이자율입니다.</li>
+                            <li>**응용 개념:** 연금(Annuity)의 현재/미래 가치 계산, 72의 법칙(Rule of 72)을 이용한 원금 두 배 소요 기간 추정.</li>
+                            <li>**실습 적용:** 장기 적금 목표액 산정, 주택 담보 대출의 원리금 균등 상환액 계산을 통해 실생활 재무 계획에 활용하는 방법을 학습했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 2: 포트폴리오 이론 및 분산 투자 - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        포트폴리오 이론 및 분산 투자 (Portfolio Theory & Diversification)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">해리 마코위츠(Harry Markowitz)가 정립한 현대 포트폴리오 이론(MPT)은 기대 수익률은 동일하게 유지하면서 위험(변동성)을 최소화하는 최적의 자산 조합을 찾는 방법을 제시합니다. 핵심은 **분산 투자**이며, 상관 계수($\rho$)가 1보다 작은 여러 자산을 결합함으로써 비체계적 위험(Unsystematic Risk)을 제거할 수 있음을 학습했습니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**핵심 개념:** 체계적 위험(시장 위험, 분산 불가능), 비체계적 위험(개별 위험, 분산 가능), 효율적 경계선(Efficient Frontier)을 통한 위험 대비 최대 수익률 조합 도출.</li>
+                            <li>**분산 효과:** 포트폴리오의 위험은 개별 자산의 위험의 합보다 낮아지며, 이는 자산 간의 낮은 상관 계수에 기인합니다.</li>
+                            <li>**적용:** 가상 투자 실습에서 기술주, 금융주, 채권 등 이질적인 자산을 혼합하여 시장 변동성에 대비하는 전략을 수립하고 성과를 분석했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 3: 채권 가격 결정 및 만기수익률 - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        채권 가격 결정 및 만기수익률 (Bond Pricing and YTM)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">채권의 현재 가격은 미래에 지급될 모든 현금 흐름(쿠폰 이자 및 만기 원금)을 시장 이자율로 할인한 현재 가치의 합입니다. **시장 금리와 채권 가격은 역의 관계**를 가지며, 금리가 오르면 채권 가격은 하락합니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**주요 지표:** 만기수익률(YTM, 채권 매입 시점부터 만기까지 얻는 총 수익률), 듀레이션(Duration, 금리 변화에 대한 채권 가격 민감도를 측정). 듀레이션이 길수록 금리 변동에 더 민감합니다.</li>
+                            <li>**계산 원리:** 채권 가격 $P = \sum_{t=1}^{n} \frac{C}{(1+r)^t} + \frac{F}{(1+r)^n}$ ($C$: 쿠폰, $F$: 액면가, $r$: 시장 이자율).</li>
+                            <li>**적용:** 금리 전망에 따라 장기채와 단기채 비중을 조절하거나, 이표채와 무이표채의 특성을 비교 분석하는 전략적 채권 투자 결정에 활용했습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Summary Item 4: 개인 재무 관리 및 리스크 관리 (NEW ADDITION) - 분량 증가 -->
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <button class="w-full text-left font-semibold text-xl flex justify-between items-center summary-toggle">
+                        개인 재무 관리 및 리스크 관리 (Personal Finance & Risk Management)
+                        <svg class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="text-gray-600">효율적인 재무 관리는 개인의 재무 목표 달성과 삶의 질 향상의 기초입니다. 신용 관리, 부채 관리, 예산 수립 능력을 통해 개인의 재무 상태를 최적화하는 방법을 학습했습니다. 또한, 예상치 못한 위험으로부터 자산을 보호하는 보험의 원리와 기능을 이해했습니다.</p>
+                        <ul class="list-disc list-inside mt-3 text-sm text-gray-500 space-y-1">
+                            <li>**개인 재무:** 예산 수립의 50/30/20 규칙 이해, 신용 점수(Credit Score) 관리의 중요성 및 부채 관리 원칙(고금리 부채 우선 상환).</li>
+                            <li>**위험 관리:** 위험의 회피(Avoidance), 보유(Retention), 전가(Transfer/보험)의 3가지 관리 방법론 이해.</li>
+                            <li>**보험 원리:** 대수의 법칙(Law of Large Numbers)을 통한 보험료 산정 원리 및 도덕적 해이(Moral Hazard), 역선택(Adverse Selection)과 같은 보험 시장의 기본 문제 분석.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NEW SECTION: 교과내용 요약 보기 (Quick Summary Menu) -->
+        <section id="quick-summary" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    교과내용 요약 보기 (Curriculum At-a-Glance)
+                </h2>
+            </div>
+            
+            <!-- 수업자료.pdf 보기 버튼 추가 -->
+            <!-- NOTE: href="#"를 요청하신 Google Apps Script URL로 교체했습니다. -->
+            <a href="https://script.google.com/macros/s/AKfycbxXDTU16R8ySw3d4WaMF6r3nnh5uTEZ71yJQ10IgFbpo4L3dZQmaPTt1dQ2Lv2i1To_/exec" target="_blank" class="inline-block mb-6 group">
+                <button class="flex items-center space-x-2 bg-busan-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform group-hover:scale-105 shadow-xl">
+                    <span>수업자료.pdf 보기</span>
+                    <!-- PDF Icon (File document icon with a corner fold) -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </button>
+            </a>
+            
+            <div class="space-y-3 text-lg text-gray-700 leading-relaxed">
+                <p class="font-semibold text-xl mb-3">핵심 학습 모듈:</p>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li><strong class="busan-text">Module 1:</strong> 화폐의 시간 가치 (Time Value of Money) - 미래/현재 가치, 복리 계산 원리.</li>
+                    <li><strong class="busan-text">Module 2:</strong> 포트폴리오 및 분산 투자 (Portfolio Theory) - 위험과 수익의 상충 관계, 비체계적 위험 제거.</li>
+                    <li><strong class="busan-text">Module 3:</strong> 채권 및 금리 이해 (Bond Market) - 채권 가격 결정, 만기수익률(YTM), 듀레이션 분석.</li>
+                    <li><strong class="busan-text">Module 4:</strong> 개인 재무 및 리스크 관리 (Personal Finance) - 예산, 신용, 부채 관리 및 보험의 기본 원리.</li>
+                </ul>
+                <p class="text-base text-gray-500 pt-3">
+                    더 자세한 내용(공식, 응용 개념)은 위의 '교과 핵심 정리' 섹션을 펼쳐서 확인하거나, '핵심 정리 보러가기' 버튼을 클릭해 주세요.
+                </p>
+            </div>
+        </section>
+        <!-- End of NEW SECTION -->
+
+        <!-- 3. 수업 소감 (Reflection) Section - 강조 표시 제거 -->
+        <section id="reflection" class="mb-16 bg-white p-8 rounded-xl card-shadow">
+            <div class="flex justify-between items-center mb-6 border-b-2 pb-2 border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-bold busan-text">
+                    수업 소감 (Course Reflection)
+                </h2>
+            </div>
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
+                <p>
+                    이 수업을 듣고 가장 좋았던 건 '돈이 움직이는 원리'를 눈으로 직접 확인했다는 거예요. 복리 계산부터 분산 투자까지, 막연하게 듣던 투자가 왜 과학인지 이해가 됐습니다. 금융 지식이 어른들만의 이야기가 아니라, 고등학생인 저에게도 당장 필요한 중요한 능력이라는 것을 깨달았습니다. 앞으로는 배운 대로 용돈을 '소비'만 하지 않고 '투자'하는 습관을 들이고 싶습니다.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="busan-bg text-white py-6 mt-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm opacity-80">
+            &copy; 2025 Busan National University General Finance Portfolio. All rights reserved.
+        </div>
     </footer>
 
+    <script>
+        // Glossary Data
+        const glossaryData = [
+            { term: "CAPM", definition: "Capital Asset Pricing Model (자본자산 가격결정 모형): 자산의 체계적 위험(베타)과 기대 수익률 간의 선형 관계를 설명하는 모델.", category: "투자론" },
+            { term: "PV", definition: "Present Value (현재 가치): 미래에 받게 될 금액을 현재 시점의 가치로 환산한 금액. 화폐의 시간 가치 계산의 기본 개념.", category: "재무 계산" },
+            { term: "FV", definition: "Future Value (미래 가치): 현재 금액을 특정 이자율로 일정 기간 동안 투자했을 때 미래에 받게 될 금액.", category: "재무 계산" },
+            { term: "YTM", definition: "Yield to Maturity (만기수익률): 채권을 만기까지 보유했을 때 얻게 되는 총 수익률. 채권 투자 결정의 핵심 지표.", category: "채권" },
+            { term: "Beta", definition: "베타: 개별 주식의 가격 변동성이 전체 시장(예: KOSPI)의 가격 변동성에 비해 얼마나 민감한지를 나타내는 지표. CAPM에서 사용됨.", category: "투자론" },
+            { term: "ETF", definition: "Exchange Traded Fund (상장지수펀드): 특정 지수(Index)의 성과를 추종하도록 설계된 펀드로, 주식처럼 거래소에 상장되어 실시간으로 매매되는 상품.", category: "상품" },
+            { term: "PER", definition: "Price-to-Earnings Ratio (주가수익비율): 주가를 주당순이익(EPS)으로 나눈 값. 기업의 가치 평가에 사용되며, 낮을수록 저평가된 것으로 간주.", category: "기업 분석" },
+            { term: "PBR", definition: "Price-to-Book Ratio (주가순자산비율): 주가를 주당순자산(BPS)으로 나눈 값. 기업의 재무 상태 대비 주식 가치를 평가하는 지표.", category: "기업 분석" },
+            { term: "리스크", definition: "Risk (위험): 미래 수익률이 기대했던 수익률과 달라질 가능성. 금융에서는 주로 변동성(Volatility)으로 측정됨.", category: "위험 관리" },
+        ];
+
+        const glossaryList = document.getElementById('glossaryList');
+        const searchTermInput = document.getElementById('searchTerm');
+
+        // Function to render the glossary list
+        function renderGlossary(data) {
+            glossaryList.innerHTML = ''; // Clear existing list
+            
+            if (data.length === 0) {
+                glossaryList.innerHTML = '<p class="text-center text-gray-500 py-8">검색 결과가 없습니다.</p>';
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const itemHtml = `
+                    <div class="bg-white p-4 rounded-xl card-shadow border-l-4 border-busan-blue">
+                        <button id="term-toggle-${index}" class="w-full text-left font-medium text-lg flex justify-between items-center glossary-toggle">
+                            <span class="font-bold busan-text">${item.term}</span>
+                            <span class="text-sm text-gray-500 mr-2">(${item.category})</span>
+                            <svg class="w-5 h-5 transition-transform duration-300 transform ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <p class="text-gray-700">${item.definition}</p>
+                        </div>
+                    </div>
+                `;
+                glossaryList.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            // Reattach event listeners to new elements
+            document.querySelectorAll('.glossary-toggle').forEach(button => {
+                button.addEventListener('click', toggleAccordion);
+            });
+        }
+
+        // Accordion toggle function
+        function toggleAccordion(event) {
+            const button = event.currentTarget;
+            const content = button.nextElementSibling;
+            
+            // Check if it is already active
+            const isActive = content.classList.contains('active');
+
+            // Close all other open items in the same section (optional but improves UX)
+            button.closest('section').querySelectorAll('.accordion-content.active').forEach(activeContent => {
+                if (activeContent !== content) {
+                    activeContent.classList.remove('active');
+                    activeContent.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                }
+            });
+
+            // Toggle the current item
+            if (isActive) {
+                content.classList.remove('active');
+                button.querySelector('svg').classList.remove('rotate-180');
+            } else {
+                content.classList.add('active');
+                button.querySelector('svg').classList.add('rotate-180');
+            }
+        }
+
+        // Search functionality
+        searchTermInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filteredData = glossaryData.filter(item => 
+                item.term.toLowerCase().includes(query) || 
+                item.definition.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query)
+            );
+            renderGlossary(filteredData);
+        });
+
+        // Initialize on load
+        window.onload = function() {
+            // Initial rendering of glossary
+            renderGlossary(glossaryData);
+
+            // Attach listeners for Core Summary items
+            document.querySelectorAll('.summary-toggle').forEach(button => {
+                button.addEventListener('click', toggleAccordion);
+            });
+        }
+    </script>
 </body>
 </html>
-
-<script> window.chtlConfig = { chatbotId: "3442669387" } </script>
-<script async data-id="3442669387" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
